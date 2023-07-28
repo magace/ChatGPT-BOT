@@ -2,6 +2,8 @@
 
 A simple way to send and receive requests from chat gpt.
 
+TODO:  Report username that ask questions back to discord.  Clean up discord hook. Fix estimated cost.  It's calculating too high.
+
 Here are some pictures of it in use...
 
 In game:  
