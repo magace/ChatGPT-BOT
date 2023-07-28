@@ -1,0 +1,12 @@
+{
+    "PRE_MESSAGE": "Answer this in 50 words or less: ",
+    "OPENAI_API_KEY": "ENTER YOUR OPENAI CHATGPT API KEY",
+    "TOKEN_COST": ".0002",
+    "DISCORD_HOOK": "ENTER YOUR DISCORD HOOK HERE",
+    "DIRECTORIES": {
+        "CHATBOT1":"C:\\Users\\user\\Desktop\\chatbot\\",
+        "CHATBOT2":"CHANGE YOUR DIRECTORIES HERE",
+        "CHATBOT3":"REMEMBER TO USE DOUBLE SLASHES \\",
+        "CHATBOT4":"ADD MORE DIRECTORIES AS NEEDED"
+    }
+}
