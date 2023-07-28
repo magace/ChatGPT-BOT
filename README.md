@@ -2,7 +2,9 @@
 
 A simple way to send and receive requests from chat gpt.
 
-TODO:  Report username that ask questions back to discord.  Clean up discord hook. Fix estimated cost.  It's calculating too high.  Find a asian to test the unicode for chinese lettering.
+What does this do?  Basically you use kolbot or stealthbot to create a question.txt file with whatever question you have.  The python script monitors whatever folders you put in the config file.  If it finds a question.txt file it reads it sends the question to chat GPT api and creates a answer.txt in the same directory with the answer.  Kolbot or stealthbot then reads the answer file and says the results.  Pretty simple.
+
+TODO:  Report username that ask questions back to discord.  Clean up discord hook. Fix estimated cost.  It's calculating too high.  Find a asian to test the unicode for chinese lettering.  Add error handling with stealthbot sometimes it hangs up if something goes wrong.  Make the kolbot use a worker until the answer file is there.  
 
 Here are some pictures of it in use...
 
