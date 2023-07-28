@@ -2,7 +2,7 @@
 
 A simple way to send and receive requests from chat gpt.
 
-TODO:  Report username that ask questions back to discord.  Clean up discord hook. Fix estimated cost.  It's calculating too high.
+TODO:  Report username that ask questions back to discord.  Clean up discord hook. Fix estimated cost.  It's calculating too high.  Find a asian to test the unicode for chinese lettering.
 
 Here are some pictures of it in use...
 
