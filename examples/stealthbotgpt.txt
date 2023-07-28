@@ -1,0 +1,85 @@
+Dim fso
+Set fso = CreateObject("Scripting.FileSystemObject")
+
+Script("Name") = "CHATGPT Script"
+Script("Author") = "Magace"
+Script("Major") = 1
+Script("Minor") = 0
+Script("Description") = "Script to save and read answers from chat gpt"
+
+
+Sub Event_UserTalk(Username, Flags, Message, Ping)
+    Dim command, args
+    command = LCase(Left(Message, 6))
+    If command = ".chat " Then
+        args = Mid(Message, 7)
+        SaveArgsToFile args
+        WaitForAnswerFile
+        PrintAndDeleteAnswerFile
+    End If
+End Sub
+
+Sub WaitForAnswerFile
+    Dim answerFilePath
+    answerFilePath = "C:\Users\r730\Desktop\chatbot\answer.txt"
+    Do While Not fso.FileExists(answerFilePath)
+        ' Busy loop to create a delay. The loop will execute for approximately 0.5 second
+        startTime = Timer
+        Do While Timer < startTime + 1
+            Loop
+    Loop
+End Sub
+
+
+Sub SaveArgsToFile(args)
+    Dim file, filePath
+    filePath = "C:\Users\r730\Desktop\chatbot\question.txt"
+    Set file = fso.CreateTextFile(filePath, True)
+    file.WriteLine args
+    file.Close
+End Sub
+
+Sub PrintAndDeleteAnswerFile
+    Dim answerFilePath, answerFile, assistantResponse
+    answerFilePath = "C:\Users\r730\Desktop\chatbot\answer.txt"
+    
+    If fso.FileExists(answerFilePath) Then
+        Set answerFile = fso.OpenTextFile(answerFilePath, 1)
+        If Not answerFile.AtEndOfStream Then
+            'If answer.txt is not empty, set its content to assistantResponse
+            assistantResponse = answerFile.ReadAll
+
+            ' Calculate length of assistantResponse
+            length = Len(assistantResponse)
+            
+            ' Use Addchat to print the number of messages, preceded by "Length of messages: "
+            AddChat vbYellow, "Length of messages: " & length
+
+            ' Split assistantResponse into chunks of around 200 characters, but not splitting mid-word, and add a delay of 2 seconds between each message
+            Dim startIndex, endIndex
+            startIndex = 1
+            Do While startIndex < length
+                If startIndex + 200 - 1 > length Then
+                    endIndex = length
+                Else
+                    endIndex = InStrRev(assistantResponse, " ", startIndex + 200 - 1) - 1
+                    If endIndex < startIndex Then endIndex = startIndex + 200 - 1 ' In case a word is longer than 200 characters
+                End If
+                AddQ Mid(assistantResponse, startIndex, endIndex - startIndex + 1)
+                Delay 2
+                startIndex = endIndex + 1
+            Loop
+        End If
+        answerFile.Close
+        'Deleting the answer.txt file after reading its content
+        fso.DeleteFile answerFilePath
+    End If
+End Sub
+
+
+Sub Delay(seconds)
+    Dim start
+    start = Timer
+    Do While Timer < start + seconds
+        Loop
+End Sub
