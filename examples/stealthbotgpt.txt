@@ -3,7 +3,7 @@ Script("Name") = "CHATGPT Script"
 Script("Author") = "Dom"
 Script("Major") = 1
 Script("Minor") = 0
-Script("Description") = "Script to save and read answers from a chat system"
+Script("Description") = "Script to save and read answers from a chat system update to paths python scirpt uses.  other cmds .chatban user and .chatunban user"
 
 Dim fso
 Dim answerFilePath
