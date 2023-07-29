@@ -1,0 +1,194 @@
+
+Script("Name") = "CHATGPT Script"
+Script("Author") = "Dom"
+Script("Major") = 1
+Script("Minor") = 0
+Script("Description") = "Script to save and read answers from a chat system"
+
+Dim fso
+Dim answerFilePath
+Dim questionFilePath
+Set fso = CreateObject("Scripting.FileSystemObject")
+answerFilePath = "C:\Users\r730\Desktop\chatbot\answer.txt"
+questionFilePath = "C:\Users\r730\Desktop\chatbot\question.txt"
+Const ChatBan_Access = 99 ' Access required to chatban and chatunban
+
+Sub Event_UserTalk(Username, Flags, Message, Ping)
+    GetDBEntry Username, myAccess, myFlags
+    Dim command, args, fso, file, line, banned
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    banned = False
+    If fso.FileExists("chatbanned.txt") Then
+        Set file = fso.OpenTextFile("chatbanned.txt", 1)
+        Do Until file.AtEndOfStream
+            line = file.ReadLine
+            If line = Username Then
+                banned = True
+                Exit Do
+            End If
+        Loop
+        file.Close
+    End If
+    If banned Then
+        'AddQ "Sorry, " & Username & ", you are banned from using chat commands."
+        Exit Sub
+    End If
+    If Right(Message, 1) = "?" Then
+        SaveArgsToFile Username & " " & Message
+        WaitForAnswerFile
+        PrintAndDeleteAnswerFile
+    Else
+        command = LCase(Split(Message, " ")(0))
+        If command = ".chatban" Then
+            args = Mid(Message, Len(command) + 2)
+            If myAccess < ChatBan_Access Then
+                AddQ "Sorry, " & Username & ", you do not have enough access."
+                NOACCESS 1, Username: Exit Sub
+            End If
+            AddQ "Banning " & args
+            AppendToFile "chatbanned.txt", args
+        ElseIf command = ".chatunban" Then
+            args = Mid(Message, Len(command) + 2)
+            If myAccess < ChatBan_Access Then
+                AddQ "Sorry, " & Username & ", you do not have enough access."
+                NOACCESS 1, Username: Exit Sub
+            End If
+            If fso.FileExists("chatbanned.txt") Then
+                Dim tmpFile, tmpLine
+                Set tmpFile = fso.OpenTextFile("chatbanned.txt", 1)
+                Dim tmpArr: tmpArr = Array()
+                Do Until tmpFile.AtEndOfStream
+                    tmpLine = tmpFile.ReadLine
+                    If tmpLine <> args Then
+                        tmpArr = ArrayCon(tmpArr, tmpLine)
+                    End If
+                Loop
+                tmpFile.Close
+                Set file = fso.OpenTextFile("chatbanned.txt", 2, True)
+                For Each line In tmpArr
+                    file.WriteLine line
+                Next
+                file.Close
+                AddQ "Unbanned " & args
+            End If
+        ElseIf command = ".chat" Then
+            If fso.FileExists("chatbanned.txt") Then
+        Set file = fso.OpenTextFile("chatbanned.txt", 1)
+        Do Until file.AtEndOfStream
+            line = file.ReadLine
+            If line = Username Then
+                banned = True
+                Exit Do
+            End If
+        Loop
+        file.Close
+    End If
+    If banned Then
+        'AddQ "Sorry, " & Username & ", you are banned from using chat commands."
+        Exit Sub
+    End If
+            args = Mid(Message, Len(command) + 2)
+            SaveArgsToFile Username & " " & args
+            WaitForAnswerFile
+            PrintAndDeleteAnswerFile
+        End If
+    End If
+End Sub
+
+' Helper function to add item to array
+Function ArrayCon(Arr, Val)
+    Redim Preserve Arr(UBound(Arr) + 1)
+    Arr(UBound(Arr)) = Val
+    ArrayCon = Arr
+End Function
+
+
+
+Sub AppendToFile(filename, text)
+    Dim fso, file
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    If fso.FileExists(filename) Then
+        Set file = fso.OpenTextFile(filename, 8, True)
+    Else
+        Set file = fso.CreateTextFile(filename, True)
+    End If
+    file.WriteLine text
+    file.Close
+End Sub
+
+
+Sub WaitForAnswerFile
+    Dim startTime, timeOut
+    startTime = Timer
+    timeOut = 5 ' Timeout of 5 seconds
+
+    Do While Not fso.FileExists(answerFilePath) And Timer < startTime + timeOut
+        ' Busy loop to create a delay. The loop will execute for approximately 0.5 second
+        delayStart = Timer
+        Do While Timer < delayStart + 0.5
+            Loop
+    Loop
+
+    ' If file does not exist after timeout, handle the condition
+    If Not fso.FileExists(answerFilePath) Then
+        ' Code to handle the timeout condition
+    End If
+End Sub
+
+
+
+Sub SaveArgsToFile(args)
+    ' Delete the answer file if it exists
+    If fso.FileExists(answerFilePath) Then
+        fso.DeleteFile(answerFilePath)
+    End If
+
+    ' Create and write to the question file
+    Set file = fso.CreateTextFile(questionFilePath, True)
+    file.WriteLine args
+    file.Close
+End Sub
+
+Sub PrintAndDeleteAnswerFile
+    Dim answerFile, assistantResponse
+    
+    If fso.FileExists(answerFilePath) Then
+        Set answerFile = fso.OpenTextFile(answerFilePath, 1)
+        If Not answerFile.AtEndOfStream Then
+            'If answer.txt is not empty, set its content to assistantResponse
+            assistantResponse = answerFile.ReadAll
+
+            ' Calculate length of assistantResponse
+            length = Len(assistantResponse)
+            
+            ' Use Addchat to print the number of messages, preceded by "Length of messages: "
+            AddChat vbYellow, "Length of messages: " & length
+
+            ' Split assistantResponse into chunks of around 200 characters, but not splitting mid-word, and add a delay of 2 seconds between each message
+            Dim startIndex, endIndex
+            startIndex = 1
+            Do While startIndex < length
+                If startIndex + 200 - 1 > length Then
+                    endIndex = length
+                Else
+                    endIndex = InStrRev(assistantResponse, " ", startIndex + 200 - 1) - 1
+                    If endIndex < startIndex Then endIndex = startIndex + 200 - 1 ' In case a word is longer than 200 characters
+                End If
+                AddQ Mid(assistantResponse, startIndex, endIndex - startIndex + 1)
+                Delay 2
+                startIndex = endIndex + 1
+            Loop
+        End If
+        answerFile.Close
+        'Deleting the answer.txt file after reading its content
+        fso.DeleteFile answerFilePath
+    End If
+End Sub
+
+
+Sub Delay(seconds)
+    Dim start
+    start = Timer
+    Do While Timer < start + seconds
+        Loop
+End Sub
