@@ -6,6 +6,7 @@ from unidecode import unidecode
 import requests
 import json
 import tenacity
+import time
 
 def load_config():
     with open("config.json") as json_file:
@@ -48,8 +49,15 @@ def main():
                     send_to_discord(
                         discord_hook, f"Question received from {name} ({username}): {user_input}"
                     )
+
+                # Measure time before API call
+                api_call_start_time = time.time()
+
                 conversation = [{"role": "user", "content": user_input}]
                 response = ask_chat_gpt(conversation)
+
+                # Measure time after API call and file writing
+                api_call_end_time = time.time()
 
                 print(
                     f"[green]Answer from ChatGPT: {response['choices'][0]['message']['content']}[/green]"
@@ -68,6 +76,11 @@ def main():
                 with open(answer_file_path, "w") as answer_file:
                     response_no_newlines = response.replace("\n", " ")
                     answer_file.write(response_no_newlines)
+
+                # Calculate and print time taken for API call and file writing
+                time_taken = api_call_end_time - api_call_start_time
+                time_taken = round(time_taken, 2)
+                print(f"Time taken (seconds): {time_taken:.2f}")
                 os.remove(question_file_path)
         time.sleep(1)
 
