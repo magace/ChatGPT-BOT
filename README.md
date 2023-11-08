@@ -14,8 +14,8 @@ In game:
 Stealthbot:  
 ![image](https://github.com/magace/ChatGPT-BOT/assets/7795098/3b871513-092b-48ac-a0de-d069e0a0e72d)
 
-Discord (needs work):  
-![image](https://github.com/magace/ChatGPT-BOT/assets/7795098/22685d3e-0003-466b-9f59-2a80c80e1b66)
+Discord:  
+![image](https://github.com/magace/ChatGPT-BOT/assets/7795098/0ddfa864-8496-4219-87ce-10db7d11d2f5)
 
 Console:  
 ![image](https://github.com/magace/ChatGPT-BOT/assets/7795098/d1cf2660-e6ea-4f0c-a8e3-86c62cb6ced3)
