@@ -1,8 +1,9 @@
 {
     "PRE_MESSAGE": "Answer this in 50 words or less: ",
-    "OPENAI_API_KEY": "ENTER YOUR OPENAI CHATGPT API KEY",
-    "TOKEN_COST": ".0002",
-    "DISCORD_HOOK": "ENTER YOUR DISCORD HOOK HERE",
+    "TOKEN_COST": "0.00002",
+    "GPT_VERSION": "gpt-4o",
+    "OPENAI_API_KEY": "Your API KEY",
+    "DISCORD_HOOK": "Your Discord Hook",
     "DIRECTORIES": {
         "CHATBOT1":"C:\\Users\\user\\Desktop\\chatbot\\",
         "CHATBOT2":"CHANGE YOUR DIRECTORIES HERE",
