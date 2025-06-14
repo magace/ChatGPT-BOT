@@ -2,12 +2,17 @@
     "PRE_MESSAGE": "Answer this in 50 words or less: ",
     "TOKEN_COST": "0.00002",
     "GPT_VERSION": "gpt-4o",
-    "OPENAI_API_KEY": "Your API KEY",
-    "DISCORD_HOOK": "Your Discord Hook",
+    "OPENAI_API_KEY": "OPENAI KEY",
+    "DISCORD_HOOK": "YOUR DISCORD HOOK",
     "DIRECTORIES": {
-        "CHATBOT1":"C:\\Users\\user\\Desktop\\chatbot\\",
-        "CHATBOT2":"CHANGE YOUR DIRECTORIES HERE",
-        "CHATBOT3":"REMEMBER TO USE DOUBLE SLASHES \\",
-        "CHATBOT4":"ADD MORE DIRECTORIES AS NEEDED"
-    }
+        "CHATBOT1":"C:\\Users\\i9\\Desktop\\ChatGPT-BOT-main\\test"
+    },
+    "allowed_channel_ids": [
+        123,
+        456,
+        789
+    ],
+    "commant_prefix": ".chat",
+    "bot_name": "Chatbot",
+    "bot_token": "YOURBOTTOKEN"
 }
